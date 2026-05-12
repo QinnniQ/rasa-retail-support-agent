@@ -1,0 +1,19 @@
+﻿version: "3.1"
+
+stories:
+  - story: Full demo support journey
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: ask_return_order
+      - action: utter_return_order
+      - intent: ask_opened_packaging
+      - action: utter_opened_packaging
+      - intent: report_damaged_product
+      - action: utter_damaged_product
+      - intent: ask_refund_timing
+      - action: utter_refund_timing
+      - intent: report_missing_package
+      - action: utter_missing_package
+      - intent: ask_human_agent
+      - action: utter_human_agent

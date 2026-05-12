@@ -1,0 +1,125 @@
+﻿version: "3.1"
+
+nlu:
+  - intent: greet
+    examples: |
+      - hoi
+      - hallo
+      - goedemiddag
+      - goede morgen
+      - hey
+      - hi
+
+  - intent: ask_return_order
+    examples: |
+      - Ik wil een online bestelling retourneren. Wat moet ik doen?
+      - Hoe kan ik mijn online bestelling retourneren?
+      - Ik wil iets terugsturen
+      - Hoe werkt retourneren?
+      - Ik wil mijn bestelling retour sturen
+      - Kan ik een online bestelling terugbrengen?
+      - Wat moet ik doen om mijn bestelling te retourneren?
+      - Ik wil een product retour melden
+      - Hoe stuur ik een artikel terug?
+      - Ik wil iets retourneren dat ik online heb gekocht
+
+  - intent: ask_opened_packaging
+    examples: |
+      - Wat als de verpakking al geopend is?
+      - De verpakking is al open, kan ik nog retourneren?
+      - Mag ik retourneren als ik de doos heb geopend?
+      - Ik heb de verpakking geopend
+      - Kan ik een geopend artikel terugsturen?
+      - Het product zit niet meer in de originele verpakking
+      - Wat gebeurt er als de verpakking beschadigd is?
+      - Kan ik retourneren zonder originele verpakking?
+      - De doos is open gemaakt
+      - Het artikel is uitgepakt, mag ik het terugsturen?
+
+  - intent: report_damaged_product
+    examples: |
+      - Het product is beschadigd aangekomen. Wat moet ik doen?
+      - Mijn artikel is kapot aangekomen
+      - Ik heb een beschadigd product ontvangen
+      - Het product kwam gebroken aan
+      - Mijn bestelling is beschadigd geleverd
+      - Er zit schade aan het artikel
+      - Het artikel is kapot uit de doos gekomen
+      - Wat moet ik doen bij een beschadigd product?
+      - Mijn product is stuk geleverd
+      - Ik wil schade melden
+
+  - intent: ask_refund_timing
+    examples: |
+      - Hoe lang duurt het voordat ik mijn geld terugkrijg?
+      - Wanneer krijg ik mijn geld terug?
+      - Hoe lang duurt een terugbetaling?
+      - Wanneer wordt mijn retour terugbetaald?
+      - Ik wacht op mijn refund
+      - Hoe snel krijg ik mijn geld terug na retourneren?
+      - Wat is de verwerkingstijd van een terugbetaling?
+      - Wanneer staat het geld weer op mijn rekening?
+      - Hoe lang duurt refund?
+      - Ik heb geretourneerd, wanneer krijg ik terugbetaald?
+
+  - intent: report_missing_package
+    examples: |
+      - Mijn pakket staat op bezorgd, maar ik heb niets ontvangen. Wat moet ik doen?
+      - Mijn bestelling is niet aangekomen
+      - Track en trace zegt bezorgd maar ik heb niets
+      - Mijn pakket is kwijt
+      - Ik heb mijn pakket niet ontvangen
+      - De bezorger zegt dat het geleverd is maar dat klopt niet
+      - Mijn pakket is als geleverd gemarkeerd maar ontbreekt
+      - Wat moet ik doen als mijn bestelling niet is geleverd?
+      - Mijn pakket is spoorloos
+      - Ik mis mijn levering
+
+  - intent: ask_human_agent
+    examples: |
+      - Kan ik hierover met een medewerker spreken?
+      - Ik wil een medewerker spreken
+      - Kan iemand mij helpen?
+      - Verbind mij met een medewerker
+      - Ik wil contact met klantenservice
+      - Kan ik een mens spreken?
+      - Kun je me doorzetten naar een medewerker?
+      - Ik wil hulp van een medewerker
+      - Kan ik hierover contact opnemen?
+      - Ik heb persoonlijke hulp nodig
+
+  - intent: thank_you
+    examples: |
+      - bedankt
+      - dank je
+      - dankjewel
+      - top bedankt
+      - thanks
+      - super bedankt
+      - duidelijk bedankt
+
+  - intent: affirm
+    examples: |
+      - ja
+      - klopt
+      - inderdaad
+      - precies
+      - dat klopt
+      - graag
+      - oké
+
+  - intent: deny
+    examples: |
+      - nee
+      - niet nodig
+      - dat klopt niet
+      - liever niet
+      - nee bedankt
+
+  - intent: out_of_scope
+    examples: |
+      - Wat is het weer vandaag?
+      - Vertel een grap
+      - Ik wil een baan aanvragen
+      - Hoe laat is het?
+      - Wat is de hoofdstad van Frankrijk?
