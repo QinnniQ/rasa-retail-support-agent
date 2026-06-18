@@ -1,6 +1,45 @@
-﻿.venv/
+﻿# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+.venv-ui/
+venv/
+env/
+
+# Rasa generated files
 .rasa/
-.cache/
-logs/
+models/*.tar.gz
+*.db
+*.log
+
+# Local data / temporary folders
+backups/
+transcripts/
+tmp/
+temp/
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Large local artifacts
+*.zip
+*.tar
+*.gz

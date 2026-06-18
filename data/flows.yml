@@ -1,0 +1,10 @@
+flows:
+  order_context_flow:
+    name: "Kruidvat order context lookup"
+    description: "Check Kruidvat order status, missing item context, damaged item context, partner order status, refund status, delivery context, and recommended handoff reason after collecting an order number."
+    nlu_trigger:
+      - intent: start_order_lookup
+    steps:
+      - collect: order_id
+        description: "The customer's Kruidvat order number, for example KV-10482."
+      - action: action_check_order_context

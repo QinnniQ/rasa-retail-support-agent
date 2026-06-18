@@ -5,49 +5,61 @@ nlu:
     examples: |
       - hoi
       - hallo
-      - goedemiddag
-      - goede morgen
       - hey
-      - hi
+      - goedemorgen
+      - goedemiddag
+      - goedenavond
+      - hallo Kruidvat Hulp
+      - hoi Kruidvat Hulp
+
+  - intent: thank_you
+    examples: |
+      - bedankt
+      - dank je
+      - dankjewel
+      - super bedankt
+      - thanks
+      - dank u wel
+      - top bedankt
 
   - intent: ask_return_order
     examples: |
-      - Ik wil een online bestelling retourneren. Wat moet ik doen?
-      - Hoe kan ik mijn online bestelling retourneren?
-      - Ik wil iets terugsturen
-      - Hoe werkt retourneren?
-      - Ik wil mijn bestelling retour sturen
-      - Kan ik een online bestelling terugbrengen?
-      - Wat moet ik doen om mijn bestelling te retourneren?
-      - Ik wil een product retour melden
-      - Hoe stuur ik een artikel terug?
-      - Ik wil iets retourneren dat ik online heb gekocht
+      - Ik wil mijn webshopbestelling retourneren. Wat moet ik doen?
+      - Ik wil iets retourneren
+      - Hoe kan ik mijn bestelling retourneren?
+      - Kan ik mijn online bestelling terugsturen?
+      - Hoe werkt retourneren bij Kruidvat?
+      - Ik wil mijn pakket terugsturen
+      - Ik wil een Kruidvat bestelling retour sturen
+      - Kan ik een webshop aankoop retourneren?
+      - Wat zijn de retourstappen voor een online bestelling?
 
-  - intent: ask_opened_packaging
+  - intent: ask_missing_item
     examples: |
-      - Wat als de verpakking al geopend is?
-      - De verpakking is al open, kan ik nog retourneren?
-      - Mag ik retourneren als ik de doos heb geopend?
-      - Ik heb de verpakking geopend
-      - Kan ik een geopend artikel terugsturen?
-      - Het product zit niet meer in de originele verpakking
-      - Wat gebeurt er als de verpakking beschadigd is?
-      - Kan ik retourneren zonder originele verpakking?
-      - De doos is open gemaakt
-      - Het artikel is uitgepakt, mag ik het terugsturen?
+      - Er ontbreekt een artikel in mijn bestelling. Wat nu?
+      - Er mist een artikel in mijn pakket
+      - Mijn bestelling is niet compleet
+      - Ik heb niet alles ontvangen
+      - Er ontbreekt iets uit mijn bestelling
+      - Een product zit niet in het pakket
+      - Ik mis een artikel
+      - Mijn pakket mist een product
+      - Niet alle artikelen zijn geleverd
+      - Ik heb maar een deel van mijn bestelling ontvangen
 
   - intent: report_damaged_product
     examples: |
-      - Het product is beschadigd aangekomen. Wat moet ik doen?
+      - Mijn artikel is beschadigd aangekomen. Wat moet ik doen?
+      - Het product is beschadigd aangekomen
       - Mijn artikel is kapot aangekomen
-      - Ik heb een beschadigd product ontvangen
-      - Het product kwam gebroken aan
-      - Mijn bestelling is beschadigd geleverd
-      - Er zit schade aan het artikel
-      - Het artikel is kapot uit de doos gekomen
-      - Wat moet ik doen bij een beschadigd product?
-      - Mijn product is stuk geleverd
-      - Ik wil schade melden
+      - Mijn bestelling is beschadigd
+      - Het product is stuk geleverd
+      - Ik heb een beschadigd artikel ontvangen
+      - Mijn pakket bevat een kapot product
+      - Er zit schade aan mijn bestelling
+      - Het artikel is beschadigd geleverd
+      - De fles is gaan lekken in het pakket
+      - De verpakking was kapot en het artikel is beschadigd
 
   - intent: ask_refund_timing
     examples: |
@@ -55,71 +67,114 @@ nlu:
       - Wanneer krijg ik mijn geld terug?
       - Hoe lang duurt een terugbetaling?
       - Wanneer wordt mijn retour terugbetaald?
-      - Ik wacht op mijn refund
+      - Ik wacht op mijn terugbetaling
       - Hoe snel krijg ik mijn geld terug na retourneren?
-      - Wat is de verwerkingstijd van een terugbetaling?
-      - Wanneer staat het geld weer op mijn rekening?
-      - Hoe lang duurt refund?
-      - Ik heb geretourneerd, wanneer krijg ik terugbetaald?
+      - Wanneer staat het bedrag weer op mijn rekening?
+      - Hoe lang duurt de refund?
+      - Mijn terugbetaling duurt lang
+      - Waar blijft mijn terugbetaling?
 
   - intent: report_missing_package
     examples: |
       - Mijn pakket staat op bezorgd, maar ik heb niets ontvangen. Wat moet ik doen?
-      - Mijn bestelling is niet aangekomen
-      - Track en trace zegt bezorgd maar ik heb niets
-      - Mijn pakket is kwijt
+      - Mijn pakket is bezorgd volgens de vervoerder maar ik heb niks gekregen
+      - Mijn bestelling staat op bezorgd maar is niet aangekomen
+      - Het pakket is niet geleverd
       - Ik heb mijn pakket niet ontvangen
-      - De bezorger zegt dat het geleverd is maar dat klopt niet
-      - Mijn pakket is als geleverd gemarkeerd maar ontbreekt
-      - Wat moet ik doen als mijn bestelling niet is geleverd?
-      - Mijn pakket is spoorloos
-      - Ik mis mijn levering
+      - Mijn bestelling is kwijt
+      - De bezorger zegt dat het geleverd is maar ik heb niets
+      - Mijn pakket ontbreekt
+      - Waar is mijn bestelling?
+      - Mijn pakket is niet binnengekomen
+      - Track en trace zegt bezorgd maar ik heb niets
 
-  - intent: ask_human_agent
+  - intent: ask_partner_return
+    examples: |
+      - Hoe retourneer ik een partnerartikel?
+      - Mijn bestelling is van een partner, hoe werkt retourneren?
+      - Kan ik een partnerartikel terugbrengen naar de winkel?
+      - Ik heb een artikel van een externe partner besteld
+      - Werkt retourneren anders bij partnerartikelen?
+      - Mijn order is een partnerorder
+      - Wat moet ik doen met een partner retour?
+      - Kan Kruidvat mijn partnerbestelling retour nemen?
+      - Ik wil een partnerproduct terugsturen
+
+  - intent: ask_kruidvat_club
+    examples: |
+      - Ik heb een vraag over Kruidvat Club
+      - Mijn Kruidvat Club punten kloppen niet
+      - Ik kan niet inloggen op mijn Kruidvat account
+      - Mijn account werkt niet
+      - Ik zie mijn bestelling niet in mijn account
+      - Kan je mijn Kruidvat Club gegevens controleren?
+      - Ik heb een probleem met mijn Kruidvat Club kaart
+      - Mijn voordeel staat niet in mijn account
+
+  - intent: ask_human_handoff
     examples: |
       - Kan ik hierover met een medewerker spreken?
       - Ik wil een medewerker spreken
-      - Kan iemand mij helpen?
-      - Verbind mij met een medewerker
-      - Ik wil contact met klantenservice
-      - Kan ik een mens spreken?
-      - Kun je me doorzetten naar een medewerker?
-      - Ik wil hulp van een medewerker
-      - Kan ik hierover contact opnemen?
-      - Ik heb persoonlijke hulp nodig
+      - Kan ik iemand van de klantenservice spreken?
+      - Verbind me met een medewerker
+      - Ik wil contact met een mens
+      - Kan ik hulp krijgen van een medewerker?
+      - Ik wil dit met iemand bespreken
+      - Kan een medewerker dit bekijken?
+      - Ik wil dit laten controleren
+      - Kan iemand hiernaar kijken?
 
-  - intent: thank_you
+  - intent: start_order_lookup
     examples: |
-      - bedankt
-      - dank je
-      - dankjewel
-      - top bedankt
-      - thanks
-      - super bedankt
-      - duidelijk bedankt
+      - Ik wil mijn bestelling controleren
+      - Kan je mijn bestelling controleren?
+      - Ik wil de status van mijn order weten
+      - Kan je mijn orderstatus bekijken?
+      - Ik wil weten waar mijn bestelling is
+      - Controleer mijn bestelling
+      - Ik wil mijn order controleren
+      - Kan je mijn order nakijken?
+      - Waar blijft mijn bestelling?
+      - Kan je zien wat de status van mijn bestelling is?
+      - Ik wil mijn ordercontext controleren
+      - Kun je mijn bestelling erbij pakken?
 
-  - intent: affirm
+  - intent: provide_order_number
     examples: |
-      - ja
-      - klopt
-      - inderdaad
-      - precies
-      - dat klopt
-      - graag
-      - oké
+      - [KV-10482](order_id)
+      - Mijn ordernummer is [KV-10482](order_id)
+      - Het gaat om bestelling [KV-10482](order_id)
+      - Order [KV-10482](order_id)
+      - Kun je [KV-10482](order_id) controleren?
+      - Kan je [KV-10482](order_id) controleren?
+      - Mijn bestelnummer is [KV-10482](order_id)
+      - Controleer [KV-10482](order_id)
+      - [KV-20991](order_id)
+      - Mijn ordernummer is [KV-20991](order_id)
+      - Het gaat om bestelling [KV-20991](order_id)
+      - Order [KV-20991](order_id)
+      - Kun je [KV-20991](order_id) controleren?
+      - Kan je [KV-20991](order_id) controleren?
+      - Mijn bestelnummer is [KV-20991](order_id)
+      - Controleer [KV-20991](order_id)
+      - [KV-77830](order_id)
+      - Mijn ordernummer is [KV-77830](order_id)
+      - Het gaat om bestelling [KV-77830](order_id)
+      - Order [KV-77830](order_id)
+      - Kun je [KV-77830](order_id) controleren?
+      - Kan je [KV-77830](order_id) controleren?
+      - Mijn bestelnummer is [KV-77830](order_id)
+      - Controleer [KV-77830](order_id)
 
-  - intent: deny
+  - intent: fallback
     examples: |
-      - nee
-      - niet nodig
-      - dat klopt niet
-      - liever niet
-      - nee bedankt
+      - Ik heb een andere vraag
+      - Ik weet het niet
+      - Kun je me ergens anders mee helpen?
+      - Dit gaat ergens anders over
+      - Geen idee
+      - Dat bedoel ik niet
 
-  - intent: out_of_scope
+  - regex: order_id
     examples: |
-      - Wat is het weer vandaag?
-      - Vertel een grap
-      - Ik wil een baan aanvragen
-      - Hoe laat is het?
-      - Wat is de hoofdstad van Frankrijk?
+      - KV-[0-9]{5}

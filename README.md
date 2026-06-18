@@ -1,126 +1,291 @@
-﻿# \# Xenos-Inspired Rasa Support Demo
+﻿# Retail Support AgentOps — Rasa Customer-Service Automation
 
-# 
+A Rasa-based customer-service automation prototype for Dutch retail webshop support.
 
-# This is a small Rasa Pro demo inspired by public observations of the Xenos Xenna chatbot experience.
+This project demonstrates how a retail chatbot can move beyond static FAQ responses toward structured, order-aware, and inspectable support automation. The prototype focuses on high-volume customer-service scenarios such as missing items, damaged products, returns, delivery issues, partner orders, refund status, and smarter handoff to human support.
 
-# 
+> This is an independent portfolio project inspired by common Dutch retail webshop support flows. It is not an official Kruidvat, HEMA, or AS Watson product.
 
-# The demo uses simulated Dutch customer-service queries only. It does not access real customer accounts, real orders, payment information, private Xenos systems, or personal data.
+---
 
-# 
+## Why this project matters
 
-# \## Purpose
+Many retail chatbots can answer general customer-service questions, but more complex webshop cases often require order-specific context.
 
-# 
+This prototype explores the next layer of support automation:
 
-# The goal is to show how a Rasa-based assistant could improve common pre-handoff support journeys before routing a customer to a human medewerker.
+* collecting the right information from the customer,
+* retrieving structured order context from a backend service,
+* identifying whether the issue involves a missing item, damaged product, partner order, refund, or delivery problem,
+* providing clearer customer guidance,
+* and preparing a more useful handoff when a human medewerker is needed.
 
-# 
+The goal is not to replace human support. The goal is to reduce avoidable support load and make escalations more informed.
 
-# The current observed pattern in the public Xenna flow is that a basic returns journey can be routed quickly toward staff. This demo explores how Rasa could make that journey more self-service capable while still escalating when human review is actually needed.
+---
 
-# 
+## Core use case
 
-# \## Demo scope
+A customer reports a missing item:
 
-# 
+```text
+Er ontbreekt een artikel in mijn bestelling. Wat nu?
+```
 
-# The assistant handles general support questions around:
+The assistant gives initial guidance and then supports an order-aware lookup:
 
-# 
+```text
+Ik wil mijn bestelling controleren
+Mijn ordernummer is KV-10482
+```
 
-# \- returning an online order
+The system retrieves example order data from a FastAPI backend and returns context such as:
 
-# \- opened packaging
+* order status,
+* delivery status,
+* missing item details,
+* refund status,
+* item overview,
+* partner-order flag,
+* recommended next step,
+* and handoff reason.
 
-# \- damaged product received
+---
 
-# \- refund timing
+## Key features
 
-# \- package marked as delivered but not received
+* **Rasa conversational agent** with structured Dutch support flows
+* **Flow-based order lookup** using slot collection for `order_id`
+* **Custom Rasa actions** for backend API calls
+* **FastAPI mock backend** simulating order context
+* **Streamlit demo UI** for a customer-facing retail support experience
+* **Rasa Inspector compatibility** for traceable agent behavior
+* **Dutch retail CX scenarios** including missing items, damaged products, returns, delivery issues, partner-order nuance, and human handoff
 
-# \- human handoff
+---
 
-# 
+## Architecture
 
-# \## Core demo conversation
+```text
+Customer
+   ↓
+Streamlit Chat UI
+   ↓
+Rasa REST Channel
+   ↓
+Rasa Flow / NLU / Rules
+   ↓
+Custom Action: action_check_order_context
+   ↓
+FastAPI Mock Backend
+   ↓
+Order-aware response
+```
 
-# 
+---
 
-# 1\. `hoi`
+## Tech stack
 
-# 2\. `Ik wil een online bestelling retourneren. Wat moet ik doen?`
+* Python
+* Rasa Pro
+* Rasa SDK
+* FastAPI
+* Streamlit
+* Requests
+* Uvicorn
+* YAML-based Rasa domain, rules, stories, NLU, and flows
 
-# 3\. `Wat als de verpakking al geopend is?`
+---
 
-# 4\. `Het product is beschadigd aangekomen. Wat moet ik doen?`
+## Example demo orders
 
-# 5\. `Hoe lang duurt het voordat ik mijn geld terugkrijg?`
+The mock backend includes three example orders:
 
-# 6\. `Mijn pakket staat op bezorgd, maar ik heb niets ontvangen. Wat moet ik doen?`
+| Order ID   | Scenario      | Purpose                                                 |
+| ---------- | ------------- | ------------------------------------------------------- |
+| `KV-10482` | Missing item  | Demonstrates incomplete delivery and handoff reasoning  |
+| `KV-20991` | Damaged item  | Demonstrates damage guidance and review escalation      |
+| `KV-77830` | Partner order | Demonstrates partner-order nuance and return complexity |
 
-# 7\. `Kan ik hierover met een medewerker spreken?`
+---
 
-# 
+## Demo flow
 
-# \## What the Rasa demo improves
+Recommended primary demo:
 
-# 
+```text
+Er ontbreekt een artikel in mijn bestelling. Wat nu?
+```
 
-# | Observed Xenna pattern | Rasa demo improvement |
+```text
+Ik wil mijn bestelling controleren
+```
 
-# |---|---|
+```text
+Mijn ordernummer is KV-10482
+```
 
-# | Basic returns journey routed quickly to staff | Answers common return questions first |
+Optional damaged-item demo:
 
-# | Chatbot behaves mainly like a routing layer | Provides guided conversational support |
+```text
+Mijn artikel is beschadigd aangekomen. Wat moet ik doen?
+```
 
-# | Human handoff happens early | Escalates only when order-specific review is needed |
+```text
+Ik wil mijn bestelling controleren
+```
 
-# | Limited pre-handoff clarification | Handles follow-ups around packaging, damage, refund timing, and delivery |
+```text
+Mijn ordernummer is KV-20991
+```
 
-# | Customer must wait for staff for common FAQ issues | Common questions are resolved immediately where possible |
+Optional partner-order demo:
 
-# 
+```text
+Hoe retourneer ik een partnerartikel?
+```
 
-# \## Important limitation
+```text
+Ik wil mijn bestelling controleren
+```
 
-# 
+```text
+Mijn ordernummer is KV-77830
+```
 
-# This is not a production integration and does not claim to process real Xenos returns or check real orders.
+---
 
-# 
+## Project structure
 
-# The assistant only demonstrates how a Rasa-based support layer could guide users through common support scenarios and identify when a human medewerker is needed.
+```text
+rasa-retail-support-agent/
+│
+├── app.py                  # Streamlit customer-facing demo UI
+├── mock_backend.py          # FastAPI mock order backend
+├── config.yml               # Rasa pipeline and policies
+├── domain.yml               # Intents, slots, responses, actions
+├── endpoints.yml            # Rasa action server endpoint
+├── credentials.yml          # Rasa channel configuration
+│
+├── actions/
+│   └── actions.py           # Custom Rasa backend lookup action
+│
+├── data/
+│   ├── nlu.yml              # Dutch NLU examples and order regex
+│   ├── rules.yml            # Rule-based support responses
+│   ├── stories.yml          # Example conversation paths
+│   └── flows.yml            # Order context lookup flow
+│
+├── screenshots/             # Optional: demo and Inspector screenshots
+│   
+│   
+│
+└── README.md
+```
 
-# 
+---
 
-# \## Environment
+## Running locally
 
-# 
+### 1. Create and activate a virtual environment
 
-# Tested with:
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
 
-# 
+### 2. Install dependencies
 
-# \- Python 3.11.9
+```powershell
+pip install rasa-pro rasa-sdk fastapi uvicorn requests streamlit
+```
 
-# \- Rasa Pro 3.16.6
+> Depending on your Rasa license/setup, you may need to install the appropriate Rasa package available to you.
 
-# \- Windows PowerShell
+### 3. Train the Rasa assistant
 
-# 
+```powershell
+rasa train
+```
 
-# \## Run locally
+### 4. Start the mock backend
 
-# 
+```powershell
+python -m uvicorn mock_backend:app --reload --port 8001
+```
 
-# Activate the virtual environment:
+### 5. Start the Rasa action server
 
-# 
+Open a second terminal:
 
-# ```powershell
+```powershell
+.\.venv\Scripts\Activate.ps1
+rasa run actions
+```
 
-# .\\.venv\\Scripts\\Activate.ps1
+### 6. Start the Rasa server
 
+Open a third terminal:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+rasa run --enable-api --cors "*" --port 5005
+```
+
+### 7. Start the Streamlit UI
+
+Open a fourth terminal:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+streamlit run app.py
+```
+
+Then open:
+
+```text
+http://localhost:8501
+```
+
+---
+
+## Rasa Inspector
+
+To inspect the assistant behavior under the hood:
+
+```powershell
+rasa inspect --nextgen
+```
+
+The Inspector view can show:
+
+* active flow,
+* slot collection,
+* order ID handling,
+* custom action execution,
+* and flow completion.
+
+This is useful for demonstrating that the assistant is not a black-box chatbot, but a structured and traceable support workflow.
+
+---
+
+## Portfolio value
+
+This project demonstrates practical skills in:
+
+* conversational AI design,
+* Rasa flow development,
+* custom action engineering,
+* backend API integration,
+* customer-service automation,
+* Streamlit interface design,
+* support workflow modeling,
+* and business-facing AI prototyping.
+
+---
+
+## Disclaimer
+
+This project uses simulated order data and mock backend services. It does not connect to real customer accounts, retailer systems, or private order data.
+
+Brand references are used only to demonstrate realistic retail support scenarios in an independent portfolio prototype.

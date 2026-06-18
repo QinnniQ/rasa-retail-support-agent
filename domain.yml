@@ -2,48 +2,109 @@
 
 intents:
   - greet
+  - thank_you
   - ask_return_order
-  - ask_opened_packaging
+  - ask_missing_item
   - report_damaged_product
   - ask_refund_timing
   - report_missing_package
-  - ask_human_agent
-  - thank_you
-  - affirm
-  - deny
-  - out_of_scope
-  - nlu_fallback
+  - ask_partner_return
+  - ask_kruidvat_club
+  - ask_human_handoff
+  - provide_order_number
+  - start_order_lookup
+  - fallback
+
+entities:
+  - order_id
+
+slots:
+  order_id:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: order_id
 
 responses:
   utter_greet:
-    - text: "Hoi! Ik ben een Xenos-geïnspireerde Rasa demo-assistent. Ik kan je helpen met algemene vragen over retourneren, beschadigde producten, bezorgproblemen en wanneer een medewerker nodig is."
-
-  utter_return_order:
-    - text: "Natuurlijk, ik help je daarmee. Voor een online bestelling kun je meestal het retourproces volgen via je bestelling of de retourinformatie op de website. Zorg dat het artikel compleet is en voeg waar nodig de pakbon of orderinformatie toe. Ik kan je ook helpen bepalen of je situatie een normale retour is of dat er een medewerker nodig is."
-
-  utter_opened_packaging:
-    - text: "Een geopende verpakking hoeft niet altijd een probleem te zijn. Vaak hangt het af van het type product en of het artikel compleet, ongebruikt en onbeschadigd is. Bij hygiëneproducten, gebruikte artikelen of producten met een verbroken verzegeling kunnen strengere regels gelden. Als je twijfelt, is het verstandig om dit door een medewerker te laten beoordelen."
-
-  utter_damaged_product:
-    - text: "Vervelend dat het product beschadigd is aangekomen. In dat geval is het beter om dit als beschadigd product te melden in plaats van als normale retour. Meestal zijn ordergegevens en foto's van de schade nodig. Ik kan je uitleggen welke informatie handig is, maar voor beoordeling van jouw specifieke bestelling is een medewerker nodig."
-
-  utter_refund_timing:
-    - text: "De terugbetaling volgt meestal nadat de retour is ontvangen en verwerkt. De exacte timing kan afhangen van de betaalmethode en verwerkingstijd. Voor een specifieke status van jouw terugbetaling is orderinformatie nodig en kan een medewerker je verder helpen."
-
-  utter_missing_package:
-    - text: "Dat is vervelend. Als je pakket als bezorgd staat maar je hebt niets ontvangen, controleer eerst of het bij buren, een huisgenoot of een afleverpunt ligt. Als het pakket daarna nog steeds ontbreekt, is dit een order-specifieke situatie en kan een medewerker helpen met verder onderzoek."
-
-  utter_human_agent:
-    - text: "Ik kan je doorverwijzen naar een medewerker wanneer er ordergegevens, foto's, persoonlijke gegevens of een inhoudelijke beoordeling nodig zijn. In deze demo verwerk ik geen echte bestellingen, maar ik laat zien wanneer een handoff logisch is."
+    - text: "Hoi! Ik ben Kruidvat Hulp. Ik kan helpen met webshopbestellingen, ontbrekende artikelen, beschadigde producten, retouren, terugbetalingen en bezorgproblemen. Waarmee kan ik je helpen?"
 
   utter_thank_you:
-    - text: "Graag gedaan! Laat het gerust weten als je nog een vraag hebt over retourneren, schade, bezorging of terugbetaling."
+    - text: "Graag gedaan! Kan ik je nog ergens anders mee helpen?"
 
-  utter_fallback:
-    - text: "Ik weet niet zeker of ik je goed begrijp. Deze demo helpt vooral met retourneren, geopende verpakking, beschadigde producten, terugbetaling, bezorgproblemen en medewerker-handoff."
+  utter_return_order:
+    - text: >
+        Natuurlijk. Bij een webshopbestelling kun je meestal retourneren volgens de retourstappen van Kruidvat.
+        Let wel op: bij partnerartikelen kunnen de retourstappen anders zijn dan bij gewone Kruidvat-artikelen.
+        Als je een ordernummer hebt, kan ik de ordercontext controleren.
 
-  utter_out_of_scope:
-    - text: "Daar kan ik in deze demo niet mee helpen. Ik ben gericht op algemene Xenos-achtige supportvragen rond retourneren, schade, bezorging en terugbetaling."
+  utter_missing_item:
+    - text: >
+        Vervelend dat er een artikel ontbreekt. Controleer eerst of het artikel misschien apart wordt geleverd
+        of op de pakbon anders vermeld staat. Bewaar de verpakking en pakbon. Met je ordernummer kan ik de
+        ordercontext controleren en inschatten of medewerkerhulp nodig is.
+
+  utter_damaged_product:
+    - text: >
+        Dat is vervelend. Bewaar het beschadigde artikel en de verpakking, en maak indien mogelijk duidelijke
+        foto's van de schade. Bij beschadigde artikelen is vaak beoordeling nodig, zodat een medewerker kan kijken
+        naar vervanging, terugbetaling of een passende oplossing.
+
+  utter_refund_timing:
+    - text: >
+        De timing van een terugbetaling hangt af van de verwerking van de retour, de betaalmethode en soms ook
+        of het om een partnerartikel gaat. Als je een ordernummer hebt, kan ik de ordercontext controleren.
+
+  utter_missing_package:
+    - text: >
+        Als je pakket als bezorgd staat maar je hebt niets ontvangen, controleer dan eerst buren, huisgenoten
+        en eventueel een afleverpunt. Als het pakket daarna nog steeds ontbreekt, is dit een order-specifieke
+        situatie waarvoor medewerkerhulp meestal nodig is.
+
+  utter_partner_return:
+    - text: >
+        Bij partnerartikelen kunnen retourvoorwaarden en retourstappen anders zijn dan bij gewone Kruidvat-artikelen.
+        Met je ordernummer kan ik controleren of de bestelling als partnerorder bekend staat en welke vervolgstap logisch is.
+
+  utter_kruidvat_club:
+    - text: >
+        Voor Kruidvat Club- of accountvragen kan de juiste vervolgstap afhangen van je accountstatus of bestelling.
+        Ik kan algemene uitleg geven, maar voor persoonlijke accountgegevens is medewerkerhulp nodig.
+
+  utter_human_handoff:
+    - text: >
+        Natuurlijk. Ik kan je doorzetten naar een medewerker wanneer er orderonderzoek, persoonlijke gegevens,
+        foto's, partnercontext of beoordeling nodig is. Geef eventueel alvast je ordernummer en een korte uitleg van het probleem.
+
+  utter_ask_order_number_for_context:
+    - text: "Natuurlijk. Wat is je ordernummer? Dan kan ik de ordercontext controleren."
+
+  utter_ask_order_id:
+    - text: "Natuurlijk. Wat is je ordernummer? Dan kan ik de ordercontext controleren."
+
+  utter_can_do_something_else:
+    - text: "Kan ik je nog ergens anders mee helpen?"
+
+  utter_closing_words:
+    - text: "Prima, dan sluit ik dit gesprek af. Fijne dag verder!"
+
+  utter_ask_continue_conversation:
+    - text: "Kan ik je nog ergens anders mee helpen?"
+
+  utter_internal_error_rasa:
+    - text: "Er ging iets mis. Probeer het opnieuw of neem contact op met een medewerker."
+
+  utter_human_handoff_not_available:
+    - text: "Ik kan je op dit moment niet direct doorzetten, maar ik kan wel helpen met de volgende stappen."
+
+  utter_default:
+    - text: >
+        Ik weet niet zeker of ik je goed begrijp. Ik kan vooral helpen met webshopbestellingen, ontbrekende artikelen,
+        beschadigde producten, retouren, terugbetalingen, bezorgproblemen, partnerartikelen en medewerker-handoff.
+
+actions:
+  - action_check_order_context
 
 session_config:
   session_expiration_time: 60

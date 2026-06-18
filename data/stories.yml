@@ -1,19 +1,20 @@
-﻿version: "3.1"
+version: "3.1"
 
 stories:
-  - story: Full demo support journey
+  - story: Missing item then order lookup
     steps:
-      - intent: greet
-      - action: utter_greet
-      - intent: ask_return_order
-      - action: utter_return_order
-      - intent: ask_opened_packaging
-      - action: utter_opened_packaging
+      - intent: ask_missing_item
+      - action: utter_missing_item
+      - intent: start_order_lookup
+
+  - story: Damaged product then order lookup
+    steps:
       - intent: report_damaged_product
       - action: utter_damaged_product
-      - intent: ask_refund_timing
-      - action: utter_refund_timing
-      - intent: report_missing_package
-      - action: utter_missing_package
-      - intent: ask_human_agent
-      - action: utter_human_agent
+      - intent: start_order_lookup
+
+  - story: Partner return then order lookup
+    steps:
+      - intent: ask_partner_return
+      - action: utter_partner_return
+      - intent: start_order_lookup

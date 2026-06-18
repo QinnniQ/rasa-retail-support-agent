@@ -1,23 +1,23 @@
-﻿assistant_id: xenos-rasa-support-demo
+assistant_id: hema-rasa-support-demo
 
 recipe: default.v1
 language: nl
 
 pipeline:
   - name: WhitespaceTokenizer
-  - name: RegexFeaturizer
-  - name: CountVectorsFeaturizer
-  - name: CountVectorsFeaturizer
-    analyzer: char_wb
-    min_ngram: 1
-    max_ngram: 4
-  - name: DIETClassifier
-    epochs: 100
-    constrain_similarities: true
+  - name: RegexEntityExtractor
+    use_lookup_tables: true
+    use_regexes: true
+  - name: KeywordIntentClassifier
   - name: EntitySynonymMapper
   - name: FallbackClassifier
     threshold: 0.35
     ambiguity_threshold: 0.1
+  - name: NLUCommandAdapter
 
 policies:
+  - name: FlowPolicy
   - name: RulePolicy
+    core_fallback_threshold: 0.35
+    core_fallback_action_name: "utter_default"
+    enable_fallback_prediction: true
