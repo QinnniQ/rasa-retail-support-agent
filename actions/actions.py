@@ -93,9 +93,9 @@ class ActionCheckOrderContext(Action):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
-        latest_text = tracker.latest_message.get("text", "")
-        slot_order_id = tracker.get_slot("order_id")
-        order_id = slot_order_id or extract_order_id(latest_text)
+        latest_text = tracker.latest_message.get("text") or ""
+        slot_order_id = str(tracker.get_slot("order_id") or "").strip().upper()
+        order_id = slot_order_id if re.fullmatch(r"KV-\d{5}", slot_order_id) else extract_order_id(latest_text)
 
         if not order_id:
             dispatcher.utter_message(
@@ -120,13 +120,15 @@ class ActionCheckOrderContext(Action):
             )
             return []
 
-        except requests.exceptions.HTTPError:
-            dispatcher.utter_message(
-                text=(
+        except requests.exceptions.HTTPError as exc:
+            if getattr(getattr(exc, "response", None), "status_code", None) == 404:
+                message = (
                     f"Ik kon order {order_id} niet vinden. Controleer het ordernummer "
                     "of neem contact op met een medewerker."
                 )
-            )
+            else:
+                message = "Het ordersysteem gaf een fout. Probeer het later opnieuw of neem contact op met een medewerker."
+            dispatcher.utter_message(text=message)
             return []
 
         except requests.exceptions.Timeout:
@@ -141,6 +143,12 @@ class ActionCheckOrderContext(Action):
                     "Er ging iets mis bij het ophalen van de orderinformatie. "
                     "Probeer het later opnieuw of neem contact op met een medewerker."
                 )
+            )
+            return []
+
+        except ValueError:
+            dispatcher.utter_message(
+                text="Het ordersysteem gaf ongeldige gegevens terug. Neem contact op met een medewerker."
             )
             return []
 
