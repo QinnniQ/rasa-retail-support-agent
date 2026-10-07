@@ -6,6 +6,12 @@
 
 This is an **independent portfolio prototype** using simulated orders and a Kruidvat-style interface. It is not an official Kruidvat, HEMA, AS Watson, or Rasa customer deployment. It does not create returns, issue refunds, access real customer records, or demonstrate a measured reduction in support load.
 
+## 30-second engineering walkthrough
+
+[![Preview of the order-context walkthrough](assets/walkthrough_preview.png)](assets/walkthrough.mp4)
+
+[Watch the English-captioned walkthrough](assets/walkthrough.mp4) of a missing-item lookup and staff-handoff recommendation. It uses the simulated `KV-10482` order and describes the tested backend and custom-action path. This is an illustrated explanation, **not a recording of the licensed Rasa Pro conversation** or a live retailer system.
+
 ## The support problem
 
 An FAQ bot can explain a returns policy, but a missing-item complaint needs order-specific facts. This prototype shows how to separate a conversational entry point from the backend decision path:
@@ -60,7 +66,7 @@ rasa run --enable-api --port 5005
 streamlit run app.py
 ```
 
-Open the local Streamlit URL shown in the terminal. Try `Er ontbreekt een artikel in mijn bestelling`, ask to check an order, then enter `KV-10482`. You can also inspect the backend directly at `http://localhost:8001/orders/KV-10482` without Rasa Pro.
+Open the local Streamlit URL shown in the terminal. Try `Er ontbreekt een artikel in mijn bestelling` (“An item is missing from my order”), ask to check an order, then enter `KV-10482`. You can also inspect the backend directly at `http://localhost:8001/orders/KV-10482` without Rasa Pro.
 
 ## Project map
 
@@ -71,6 +77,7 @@ Open the local Streamlit URL shown in the terminal. Try `Er ontbreekt een artike
 | `actions/actions.py` | Order lookup, deterministic advice, and failure handling. |
 | `mock_backend.py` | Three simulated orders served by FastAPI. |
 | `app.py` | Streamlit chat demo. |
+| `assets/` | English-captioned walkthrough and preview. |
 | `tests/` | Local API and action checks run in CI. |
 
 **Author:** Nicholai Gay · conversational AI and backend integration.
