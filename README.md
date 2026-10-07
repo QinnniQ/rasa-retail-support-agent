@@ -8,9 +8,9 @@ This is an **independent portfolio prototype** using simulated orders and a Krui
 
 ## 30-second engineering walkthrough
 
-[![Preview of the order-context walkthrough](assets/walkthrough_preview.png)](assets/walkthrough.mp4)
+![English-captioned walkthrough of the simulated order lookup and handoff](assets/walkthrough.gif)
 
-[Watch the English-captioned walkthrough](assets/walkthrough.mp4) of a missing-item lookup and staff-handoff recommendation. It uses the simulated `KV-10482` order and describes the tested backend and custom-action path. This is an illustrated explanation, **not a recording of the licensed Rasa Pro conversation** or a live retailer system.
+[Open the MP4 version](https://github.com/QinnniQ/rasa-retail-support-agent/raw/refs/heads/main/assets/walkthrough.mp4). The walkthrough uses the simulated `KV-10482` order and describes the tested backend and custom-action path. This is an illustrated explanation, **not a recording of the licensed Rasa Pro conversation** or a live retailer system.
 
 ## The support problem
 
@@ -77,7 +77,7 @@ Open the local Streamlit URL shown in the terminal. Try `Er ontbreekt een artike
 | `actions/actions.py` | Order lookup, deterministic advice, and failure handling. |
 | `mock_backend.py` | Three simulated orders served by FastAPI. |
 | `app.py` | Streamlit chat demo. |
-| `assets/` | English-captioned walkthrough and preview. |
+| `assets/` | English-captioned walkthrough and preview assets. |
 | `tests/` | Local API and action checks run in CI. |
 
 **Author:** Nicholai Gay · conversational AI and backend integration.
