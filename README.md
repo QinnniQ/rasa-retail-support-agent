@@ -1,5 +1,7 @@
 # Retail Support AgentOps
 
+[Nicholai Gay's AI engineering portfolio](https://profile.nickcloud.dev/) · [LinkedIn](https://www.linkedin.com/in/nicholai-gay-201905148/)
+
 **A Rasa customer-support prototype that checks an example order before giving advice.** A customer can describe a missing item, damaged product, or partner-order problem; the assistant collects an order number, asks a local FastAPI service for structured order context, and recommends a human handoff when the case needs review.
 
 [![Tests](https://github.com/QinnniQ/rasa-retail-support-agent/actions/workflows/tests.yml/badge.svg)](https://github.com/QinnniQ/rasa-retail-support-agent/actions/workflows/tests.yml) ![Python 3.10/3.12](https://img.shields.io/badge/python-3.10%20%7C%203.12-blue)
