@@ -91,6 +91,7 @@ cd frontend
 npm run format:check
 npm run build
 npm run test:proxy
+npm run test:cloud
 npm run test:e2e
 npm audit --omit=dev --audit-level=high
 ```
@@ -99,7 +100,7 @@ On 22 October 2026: fourteen API/policy/action/configuration tests passed, fourt
 
 ## Deployment boundary
 
-The frontend's static build can be hosted on Cloudflare Pages **only if** a separately hosted HTTPS FastAPI service is provided. A Pages Function forwards allowlisted `/api` requests to an `API_ORIGIN` environment variable. Cloudflare Pages does not run this Python/SQLite application. The current Compose setup is for local demonstration. Before public hosting, replace the local token gate with real authentication, protect case data, add rate limits, persistent hosted storage, monitoring, HTTPS, and a private Rasa network. See the [deployment preparation](docs/DEPLOYMENT.md). No DNS or cloud deployment has been changed. `support.nickcloud.dev` is a possible future destination, not a live URL.
+The zero-cost public portfolio uses a Cloudflare Pages Function and D1 for its deterministic demo API. It keeps fictional case records scoped to the visitor's browser session and does not store raw chat text. The Python FastAPI and optional licensed Rasa deployment remain separate: Pages cannot run those Python processes. The Function can alternatively proxy allowlisted `/api` routes to a hosted HTTPS FastAPI `API_ORIGIN`. See the [deployment guide](docs/DEPLOYMENT.md). The public demo must always be described as deterministic demo mode, not as a live Rasa assistant.
 
 ## Interview materials
 

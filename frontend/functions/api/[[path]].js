@@ -1,9 +1,11 @@
-// Cloudflare Pages proxy for a separately hosted HTTPS FastAPI service.
+// Cloudflare Pages serves the free D1-backed portfolio demo, or proxies to a hosted FastAPI API.
+import { handleCloudDemo } from './cloud-demo.js'
 export async function onRequest({ request, env }) {
   const path = new URL(request.url).pathname
   if (!/^\/api\/(chat|status|examples|cases(?:\/\d+)?)$/.test(path)) {
     return new Response('Not found', { status: 404 })
   }
+  if (env.DEMO_DB) return handleCloudDemo({ request, env })
   if (!env.API_ORIGIN) return new Response('API origin is not configured', { status: 503 })
   let origin
   try {

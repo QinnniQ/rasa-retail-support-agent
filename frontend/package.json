@@ -9,6 +9,7 @@
     "preview": "vite preview --host 0.0.0.0",
     "test:e2e": "playwright test",
     "test:proxy": "node --test tests/proxy.test.js",
+    "test:cloud": "node --test tests/cloud-demo.test.js",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"tests/*.{ts,js}\" \"functions/**/*.js\" \"*.{ts,json,html}\""
   },
   "dependencies": {

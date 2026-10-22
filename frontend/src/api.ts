@@ -29,7 +29,13 @@ export type Case = {
   assignee: string | null
   created_at: string
 }
-export type Status = { mode: 'demo' | 'rasa'; retail_api: string; rasa: string; case_store: string }
+export type Status = {
+  mode: 'demo' | 'rasa'
+  deployment?: 'cloudflare'
+  retail_api: string
+  rasa: string
+  case_store: string
+}
 
 async function json<T>(url: string, init?: RequestInit): Promise<T> {
   const response = await fetch(url, init)
@@ -51,11 +57,22 @@ export const api = {
       body: JSON.stringify({ session_id, message, category }),
     }),
   status: () => json<Status>('/api/status'),
-  cases: (token: string) => json<Case[]>('/api/cases', { headers: { 'X-Support-Token': token } }),
-  updateCase: (id: number, token: string, body: { status?: Case['status']; assignee?: string }) =>
+  cases: (credential: string, publicDemo = false) =>
+    json<Case[]>('/api/cases', {
+      headers: { [publicDemo ? 'X-Demo-Session' : 'X-Support-Token']: credential },
+    }),
+  updateCase: (
+    id: number,
+    credential: string,
+    body: { status?: Case['status']; assignee?: string },
+    publicDemo = false,
+  ) =>
     json<Case>(`/api/cases/${id}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json', 'X-Support-Token': token },
+      headers: {
+        'Content-Type': 'application/json',
+        [publicDemo ? 'X-Demo-Session' : 'X-Support-Token']: credential,
+      },
       body: JSON.stringify(body),
     }),
 }

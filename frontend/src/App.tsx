@@ -89,7 +89,12 @@ type Message = {
 }
 const now = () =>
   new Intl.DateTimeFormat('nl-NL', { hour: '2-digit', minute: '2-digit' }).format(new Date())
-const session = () => crypto.randomUUID().replaceAll('-', '')
+const newSession = () => {
+  const id = crypto.randomUUID().replaceAll('-', '')
+  sessionStorage.setItem('demo-session-id', id)
+  return id
+}
+const session = () => sessionStorage.getItem('demo-session-id') || newSession()
 
 function OrderCard({ order }: { order: Order }) {
   return (
@@ -241,7 +246,7 @@ function Chat({ onTrace }: { onTrace: (trace: Trace[]) => void }) {
           title="Nieuw gesprek"
           aria-label="Nieuw gesprek"
           onClick={() => {
-            setSessionId(session())
+            setSessionId(newSession())
             setMessages([
               {
                 role: 'assistant',
@@ -315,7 +320,9 @@ function Chat({ onTrace }: { onTrace: (trace: Trace[]) => void }) {
             <Send size={18} />
           </button>
         </form>
-        <small>Fictieve data · Geen echte Kruidvat klantenservice</small>
+        <small>
+          Fictieve data · Geen echte Kruidvat klantenservice · Gebruik geen echte persoonsgegevens
+        </small>
       </div>
     </section>
   )
@@ -323,27 +330,42 @@ function Chat({ onTrace }: { onTrace: (trace: Trace[]) => void }) {
 
 function Operations() {
   const [token, setToken] = useState(sessionStorage.getItem('ops-token') || '')
+  const [publicDemo, setPublicDemo] = useState<boolean | null>(null)
   const [cases, setCases] = useState<Case[]>([])
   const [error, setError] = useState('')
   const [filter, setFilter] = useState('all')
   const [query, setQuery] = useState('')
   const [selected, setSelected] = useState<number | null>(null)
-  const load = async (value = token) => {
+  const load = async (value = publicDemo ? session() : token, demo = publicDemo === true) => {
     try {
-      const rows = await api.cases(value)
+      const rows = await api.cases(value, demo)
       setCases(rows)
       setError('')
-      sessionStorage.setItem('ops-token', value)
+      if (!demo) sessionStorage.setItem('ops-token', value)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Cases niet beschikbaar.')
     }
   }
   useEffect(() => {
-    if (token) void load(token)
+    void api
+      .status()
+      .then((status) => {
+        if (status.deployment === 'cloudflare') {
+          setPublicDemo(true)
+          void load(session(), true)
+        } else {
+          setPublicDemo(false)
+          if (token) void load(token, false)
+        }
+      })
+      .catch(() => {
+        setPublicDemo(false)
+        setError('De dienst is niet beschikbaar.')
+      })
   }, [])
   const update = async (id: number, body: { status?: Case['status']; assignee?: string }) => {
     try {
-      await api.updateCase(id, token, body)
+      await api.updateCase(id, publicDemo ? session() : token, body, publicDemo === true)
       await load()
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Bijwerken mislukt.')
@@ -371,20 +393,31 @@ function Operations() {
       </div>
       <div className="ops-login">
         <ShieldCheck size={19} />
-        <span>
-          Deze werkruimte vereist een lokale toegangscode. Cases bevatten uitsluitend fictieve
-          gegevens.
-        </span>
-        <input
-          aria-label="Operations toegangscode"
-          type="password"
-          value={token}
-          placeholder="Toegangscode"
-          onChange={(e) => setToken(e.target.value)}
-        />
-        <button className="button primary" onClick={() => void load()} disabled={!token}>
-          Open werkruimte
-        </button>
+        {publicDemo ? (
+          <span>
+            Je ziet alleen de fictieve cases uit deze browsersessie. Er vindt geen echte overdracht
+            plaats.
+          </span>
+        ) : publicDemo === null ? (
+          <span>Werkruimte laden…</span>
+        ) : (
+          <>
+            <span>
+              Deze werkruimte vereist een lokale toegangscode. Cases bevatten uitsluitend fictieve
+              gegevens.
+            </span>
+            <input
+              aria-label="Operations toegangscode"
+              type="password"
+              value={token}
+              placeholder="Toegangscode"
+              onChange={(e) => setToken(e.target.value)}
+            />
+            <button className="button primary" onClick={() => void load()} disabled={!token}>
+              Open werkruimte
+            </button>
+          </>
+        )}
       </div>
       {error && (
         <div className="alert" role="alert">
