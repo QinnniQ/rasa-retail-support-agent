@@ -10,17 +10,17 @@ The answers distinguish this application's actual behavior from general AI/ML co
 6. **What is NLU?** It maps user language to structured meaning such as an intent and entities. It does not itself decide return eligibility.
 7. **What is dialogue management?** It decides which question or action follows from conversation state. Rasa flows and the demo session state each do this in different modes.
 8. **What is business logic?** Explicit rules over order fields, such as whether a missing item is actually in a second parcel.
-9. **What is a slot?** A stored conversation value. `order_id` is the key slot in the Rasa flow; the demo keeps it in SQLite session state.
+9. **What is a slot?** A stored conversation value. `order_id` is the key slot in the Rasa flow; the local demo keeps it in SQLite, and the public Pages demo keeps it in D1 session state.
 10. **Why ask for an order ID?** It links a vague customer claim to a structured example record. Validation prevents arbitrary strings from becoming order lookups.
 11. **How is the ID validated?** The example format is `KV-` plus five digits. Unknown valid IDs return a not-found message; malformed paths return HTTP 422.
 12. **What is a custom action?** Python code called by Rasa to perform work outside dialogue prediction. Here it fetches an order or creates a demo case.
 13. **Why separate the action server?** It isolates I/O and dependencies from conversation management and gives network failures an explicit boundary.
 14. **What is a REST API?** An HTTP interface with resources and JSON. The browser posts chat requests and the action server fetches order data.
-15. **What happens to one browser request?** React posts a typed message and session ID; FastAPI validates it, routes by mode, gets data, applies a policy, and returns text plus optional order/case/trace.
+15. **What happens to one browser request?** React posts a typed message and session ID. In public mode, a Pages Function validates it, reads demo state from D1, applies deterministic policy, and returns text plus optional order and case. In local mode, FastAPI handles the request.
 16. **Why FastAPI?** It makes request validation and response contracts concise and generates OpenAPI documentation. Its speed is not the reason to choose it here.
 17. **What does Pydantic add?** It rejects malformed input and ensures the backend response matches the expected order and chat shapes.
-18. **Why SQLite?** It persists the small demo's session and case data without external infrastructure. A real distributed pilot would need stronger database operations.
-19. **How are sessions isolated?** Each message has a random sender ID; SQLite keys state by that ID. Tests exercise two separate senders.
+18. **Why SQLite and D1?** SQLite persists the local demo without extra infrastructure. Cloudflare D1 persists the public demo within the Free plan. A real pilot would need a reviewed data model, identity, retention, and database operations.
+19. **How are sessions isolated?** Each browser tab has a random session ID. The local SQLite and public D1 stores key state by that ID; public case reads and updates are restricted to the same ID. This is a demo boundary, not user authentication.
 20. **What is a human handoff here?** A structured case stored in the demo database. It is not a live CRM transfer or message to a real employee.
 21. **When is a handoff required?** Current demo rules use it for damage, confirmed missing items, partner exceptions, and uncertain returns.
 22. **How are refund promises prevented?** The response reports the stored simulated status and explicitly says no payment or date is being promised.
@@ -36,11 +36,11 @@ The answers distinguish this application's actual behavior from general AI/ML co
 32. **What are precision and recall?** Precision asks how many predicted cases were right; recall asks how many true cases were found. A held-out labeled set is needed to measure them here.
 33. **What is F1?** The harmonic mean of precision and recall. It is useful when both false positives and missed cases matter, but no F1 is reported for this project.
 34. **What is measured today?** The evaluation script checks expected final order, handoff, and one guidance phrase for 14 selected journeys and records local execution time.
-35. **Unit vs integration vs end-to-end tests?** Policy tests isolate decisions; API tests exercise routes with a temporary database; the browser journey was manually inspected. Automated browser regression is future work.
+35. **Unit vs integration vs end-to-end tests?** Policy tests isolate decisions; API and cloud adapter tests exercise routes with temporary databases; Chromium tests cover authored browser journeys. Live Pages chat and case updates were also checked manually.
 36. **What is a Docker image?** A packaged filesystem and command. A container is a running instance of that image.
 37. **What does Compose do?** It starts and networks the frontend and API, mounts a persistent volume, and optionally starts the SDK action server.
-38. **What is CI/CD here?** GitHub Actions installs dependencies, runs Python tests/evaluation, builds TypeScript, and audits production npm dependencies. There is no automatic production deployment.
-39. **How is access protected?** Case reads/updates require a configured header token; the frontend asks for it locally. Public production would need real identity, roles, rate limits, TLS, and audit logs.
+38. **What is CI/CD here?** GitHub Actions runs Python and frontend checks. Cloudflare Pages automatically builds and deploys the `main` branch. A successful deployment does not imply the independent GitHub Actions run has passed.
+39. **How is access protected?** Local case operations use a configured header token. Public case operations are limited to the browser session ID and per-IP rate limits, over HTTPS. There is no real user identity or staff role; a production pilot would need those controls plus audit logs.
 40. **How would you scale it?** Separate stateless API replicas from managed persistent storage, make case creation idempotent, keep Rasa/action endpoints private, and monitor latency and errors.
 41. **What should be monitored in a pilot?** Service failures, request latency, task completion, unsupported claims, handoff quality, and customer feedback, with privacy-conscious event collection.
 42. **Why human in the loop?** Missing items, damage, and exceptions require judgment or authority the assistant does not have. A good case reduces repeated information gathering.

@@ -1,6 +1,6 @@
 # Free portfolio deployment
 
-The intended public address is `support.nickcloud.dev`. The public portfolio runs on Cloudflare Pages and its Pages Function, with a D1 database for fictional demo sessions and cases. It does **not** run Rasa Pro or the Python FastAPI service. The separate FastAPI and licensed Rasa path remain available for local use or a later hosted deployment.
+The public address is [support.nickcloud.dev](https://support.nickcloud.dev/). The public portfolio runs on Cloudflare Pages and its Pages Function, with a D1 database for fictional demo sessions and cases. It does **not** run Rasa Pro or the Python FastAPI service. The separate FastAPI and licensed Rasa path remain available for local use or a later hosted deployment.
 
 ## Cloudflare resources
 

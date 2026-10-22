@@ -1,6 +1,6 @@
 # Rasa Retail Support Agent
 
-[Tests](https://github.com/QinnniQ/rasa-retail-support-agent/actions/workflows/tests.yml) · [AI engineering portfolio](https://profile.nickcloud.dev/) · [LinkedIn](https://www.linkedin.com/in/nicholai-gay-201905148/)
+[Live portfolio demo](https://support.nickcloud.dev/) · [Tests](https://github.com/QinnniQ/rasa-retail-support-agent/actions/workflows/tests.yml) · [AI engineering portfolio](https://profile.nickcloud.dev/) · [LinkedIn](https://www.linkedin.com/in/nicholai-gay-201905148/)
 
 **An independent retail support platform demonstration by [Nicholai Gay](https://profile.nickcloud.dev/).** It shows how a Dutch customer enquiry can become an order lookup, a rule-based answer, and a structured human handoff. Kruidvat is the sole visual showcase brand. The app is **not affiliated with Kruidvat or Rasa** and contains only fictional orders.
 
@@ -104,7 +104,7 @@ On 22 October 2026: fourteen API/policy/action/configuration tests passed, fourt
 
 ## Deployment boundary
 
-The zero-cost public portfolio uses a Cloudflare Pages Function and D1 for its deterministic demo API. It keeps fictional case records scoped to the visitor's browser session and does not store raw chat text. The Python FastAPI and optional licensed Rasa deployment remain separate: Pages cannot run those Python processes. The Function can alternatively proxy allowlisted `/api` routes to a hosted HTTPS FastAPI `API_ORIGIN`. See the [deployment guide](docs/DEPLOYMENT.md). The public demo must always be described as deterministic demo mode, not as a live Rasa assistant.
+The [zero-cost public portfolio](https://support.nickcloud.dev/) uses a Cloudflare Pages Function and D1 for its deterministic demo API. It keeps fictional case records scoped to the visitor's browser session and does not store raw chat text. The Python FastAPI and optional licensed Rasa deployment remain separate: Pages cannot run those Python processes. The Function can alternatively proxy allowlisted `/api` routes to a hosted HTTPS FastAPI `API_ORIGIN`. See the [deployment guide](docs/DEPLOYMENT.md). The public demo must always be described as deterministic demo mode, not as a live Rasa assistant.
 
 ## Interview materials
 
