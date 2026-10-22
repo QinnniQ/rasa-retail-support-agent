@@ -1,5 +1,7 @@
 # Rasa Retail Support Agent
 
+[Tests](https://github.com/QinnniQ/rasa-retail-support-agent/actions/workflows/tests.yml) · [AI engineering portfolio](https://profile.nickcloud.dev/) · [LinkedIn](https://www.linkedin.com/in/nicholai-gay-201905148/)
+
 **An independent retail support platform demonstration by [Nicholai Gay](https://profile.nickcloud.dev/).** It shows how a Dutch customer enquiry can become an order lookup, a rule-based answer, and a structured human handoff. Kruidvat is the sole visual showcase brand. The app is **not affiliated with Kruidvat or Rasa** and contains only fictional orders.
 
 The original 2026 prototype contained a Rasa conversation layer, a Python action server, a three-order FastAPI mock, and a Streamlit UI. The React interface, SQLite case workflow, public demo adapter, and engineering explorer are later independent portfolio work. See the [baseline audit](docs/BASELINE_AUDIT.md).
@@ -7,6 +9,8 @@ The original 2026 prototype contained a Rasa conversation layer, a Python action
 ![Rendered desktop customer-service homepage](screenshots/home-desktop.png)
 
 [Mobile homepage screenshot](screenshots/home-mobile.png) · Screenshots captured from automated Chromium browser journeys.
+
+The [English-captioned order walkthrough](assets/walkthrough.gif) illustrates the original order lookup and handoff path. It is an explanation of the prototype, not a recording of a licensed Rasa Pro conversation or a real retailer system. [Open the MP4 version](assets/walkthrough.mp4).
 
 ## Try it locally
 

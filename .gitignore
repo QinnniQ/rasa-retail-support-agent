@@ -7,10 +7,15 @@ __pycache__/
 .pytest-temp/
 .mypy_cache/
 .ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
 
 # Virtual environments
 .venv/
 .venv-ui/
+.venv312/
+.uv-cache/
 venv/
 env/
 
