@@ -19,6 +19,7 @@ import {
   ShieldCheck,
   Sparkles,
   Truck,
+  Workflow,
   X,
 } from 'lucide-react'
 import { api, type Case, type Issue, type Order, type Reply, type Status, type Trace } from './api'
@@ -825,6 +826,12 @@ export function App() {
             <section className="hero">
               <div className="hero-inner">
                 <div className="hero-copy">
+                  <div className="prototype-badge">
+                    <Workflow size={16} aria-hidden="true" />
+                    <strong>Rasa prototype</strong>
+                    <span aria-hidden="true">·</span>
+                    <span>Live demo uses deterministic rules</span>
+                  </div>
                   <span className="eyebrow">
                     <span className="tiny-line" /> SLIMME HULP VOOR ELKE BESTELLING
                   </span>
