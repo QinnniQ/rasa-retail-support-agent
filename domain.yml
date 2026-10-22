@@ -14,6 +14,7 @@ intents:
   - provide_order_number
   - start_order_lookup
   - fallback
+  - nlu_fallback
 
 entities:
   - order_id
@@ -105,7 +106,13 @@ responses:
 
 actions:
   - action_check_order_context
+  - action_check_missing_item
+  - action_check_damaged_product
+  - action_check_return
+  - action_check_refund
+  - action_check_partner
+  - action_create_support_case
 
 session_config:
   session_expiration_time: 60
-  carry_over_slots_to_new_session: true
+  carry_over_slots_to_new_session: false

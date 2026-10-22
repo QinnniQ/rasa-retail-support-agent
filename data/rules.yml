@@ -11,36 +11,6 @@ rules:
       - intent: thank_you
       - action: utter_thank_you
 
-  - rule: Answer return order question
-    steps:
-      - intent: ask_return_order
-      - action: utter_return_order
-
-  - rule: Answer missing item question
-    steps:
-      - intent: ask_missing_item
-      - action: utter_missing_item
-
-  - rule: Answer damaged product question
-    steps:
-      - intent: report_damaged_product
-      - action: utter_damaged_product
-
-  - rule: Answer refund timing question
-    steps:
-      - intent: ask_refund_timing
-      - action: utter_refund_timing
-
-  - rule: Answer missing package question
-    steps:
-      - intent: report_missing_package
-      - action: utter_missing_package
-
-  - rule: Answer partner return question
-    steps:
-      - intent: ask_partner_return
-      - action: utter_partner_return
-
   - rule: Answer Kruidvat Club question
     steps:
       - intent: ask_kruidvat_club
@@ -50,8 +20,14 @@ rules:
     steps:
       - intent: ask_human_handoff
       - action: utter_human_handoff
+      - action: action_create_support_case
 
   - rule: Default fallback
+    steps:
+      - intent: nlu_fallback
+      - action: utter_default
+
+  - rule: Explicit unknown question
     steps:
       - intent: fallback
       - action: utter_default

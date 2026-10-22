@@ -1,0 +1,28 @@
+services:
+  api:
+    build: {context: ., dockerfile: Dockerfile.api}
+    environment:
+      SUPPORT_MODE: ${SUPPORT_MODE:-demo}
+      SUPPORT_DB_PATH: /app/data/support.db
+      SUPPORT_OPS_TOKEN: ${SUPPORT_OPS_TOKEN:?Set SUPPORT_OPS_TOKEN in .env}
+      RASA_URL: ${RASA_URL:-http://host.docker.internal:5005}
+    volumes: [support_data:/app/data]
+    ports: ["127.0.0.1:8001:8001"]
+    restart: unless-stopped
+  frontend:
+    build: {context: ./frontend}
+    depends_on: [api]
+    ports: ["127.0.0.1:8080:8080"]
+    restart: unless-stopped
+  actions:
+    profiles: ["rasa"]
+    build: {context: ., dockerfile: Dockerfile.actions}
+    environment:
+      RETAIL_API_URL: http://api:8001
+      SUPPORT_OPS_TOKEN: ${SUPPORT_OPS_TOKEN:?Set SUPPORT_OPS_TOKEN in .env}
+      SANIC_HOST: 0.0.0.0
+    depends_on: [api]
+    ports: ["127.0.0.1:5055:5055"]
+    restart: unless-stopped
+volumes:
+  support_data:

@@ -1,0 +1,10 @@
+FROM python:3.11-slim
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+WORKDIR /app
+COPY requirements-rasa.txt requirements.txt ./
+RUN pip install --no-cache-dir -r requirements-rasa.txt && useradd -r -u 10001 appuser
+COPY actions ./actions
+COPY support ./support
+USER appuser
+EXPOSE 5055
+CMD ["python", "-m", "rasa_sdk", "--actions", "actions"]

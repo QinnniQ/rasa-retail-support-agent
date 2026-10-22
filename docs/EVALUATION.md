@@ -1,0 +1,7 @@
+# Conversational evaluation
+
+Run `python -m evaluation.run`. The dataset in `evaluation/cases.json` contains 14 authored scenarios: multi-turn missing item, damage, partner order, delay, split delivery, completed and pending refund, return exception, unknown and malformed IDs, out-of-scope text, human request, typo, and an interrupted conversation. Each scenario uses a fresh sender and a temporary SQLite database. The harness checks final order selection, whether a case was created, and one expected phrase in the final guidance. It measures local wall-clock time per journey.
+
+On 22 October 2026, the current demo implementation passed **14/14** such checks on this Windows host. This is a small deterministic scenario suite, not a held-out language dataset, an intent-classifier accuracy result, or evidence of live customer success. Inputs were written to exercise known logic. There is no trained model in public demo mode and no meaningful train/validation/test split. Rasa Pro training and evaluation were not run because a licensed runtime is unavailable in this environment. The test does not assess broad paraphrase coverage, fairness, real policy correctness, or deployed latency.
+
+For a client pilot, first assemble consented and de-identified real enquiry samples. Separate examples used to tune routing from a held-out evaluation set. Measure task completion, incorrect routing, unsupported promises, handoff quality, and response latency with human review. Establish baseline support outcomes before claiming operational impact.

@@ -1,20 +1,3 @@
 version: "3.1"
 
-stories:
-  - story: Missing item then order lookup
-    steps:
-      - intent: ask_missing_item
-      - action: utter_missing_item
-      - intent: start_order_lookup
-
-  - story: Damaged product then order lookup
-    steps:
-      - intent: report_damaged_product
-      - action: utter_damaged_product
-      - intent: start_order_lookup
-
-  - story: Partner return then order lookup
-    steps:
-      - intent: ask_partner_return
-      - action: utter_partner_return
-      - intent: start_order_lookup
+stories: [] # Order journeys now start directly from NLU-triggered flows.

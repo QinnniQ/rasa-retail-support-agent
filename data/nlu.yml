@@ -43,6 +43,8 @@ nlu:
       - Er ontbreekt iets uit mijn bestelling
       - Een product zit niet in het pakket
       - Ik mis een artikel
+      - Ik mis een artkel
+      - Het artkel ontbrekt
       - Mijn pakket mist een product
       - Niet alle artikelen zijn geleverd
       - Ik heb maar een deel van mijn bestelling ontvangen
@@ -50,6 +52,7 @@ nlu:
   - intent: report_damaged_product
     examples: |
       - Mijn artikel is beschadigd aangekomen. Wat moet ik doen?
+      - Mijn artikel is beschadgt aangekomen
       - Het product is beschadigd aangekomen
       - Mijn artikel is kapot aangekomen
       - Mijn bestelling is beschadigd

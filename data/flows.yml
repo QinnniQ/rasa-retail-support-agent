@@ -8,3 +8,51 @@ flows:
       - collect: order_id
         description: "The customer's Kruidvat order number, for example KV-10482."
       - action: action_check_order_context
+  missing_item_flow:
+    name: "Ontbrekend artikel onderzoeken"
+    description: "Controleer een ontbrekend artikel in een bestelling."
+    nlu_trigger:
+      - intent: ask_missing_item
+    steps:
+      - collect: order_id
+      - action: action_check_missing_item
+  damaged_product_flow:
+    name: "Beschadigd artikel onderzoeken"
+    description: "Controleer een beschadigd artikel en vraag beoordeling aan."
+    nlu_trigger:
+      - intent: report_damaged_product
+    steps:
+      - collect: order_id
+      - action: action_check_damaged_product
+  return_flow:
+    name: "Retourmogelijkheid controleren"
+    description: "Controleer de vereenvoudigde retourmogelijkheid voor een bestelling."
+    nlu_trigger:
+      - intent: ask_return_order
+    steps:
+      - collect: order_id
+      - action: action_check_return
+  refund_flow:
+    name: "Terugbetalingsstatus controleren"
+    description: "Lees de geregistreerde terugbetalingsstatus zonder een betaaldatum te beloven."
+    nlu_trigger:
+      - intent: ask_refund_timing
+    steps:
+      - collect: order_id
+      - action: action_check_refund
+  partner_flow:
+    name: "Partnerbestelling controleren"
+    description: "Controleer een partnerorder en draag uitzonderingen over."
+    nlu_trigger:
+      - intent: ask_partner_return
+    steps:
+      - collect: order_id
+      - action: action_check_partner
+  delivery_flow:
+    name: "Bezorgstatus controleren"
+    description: "Controleer de bezorgstatus van een pakket."
+    nlu_trigger:
+      - intent: report_missing_package
+    steps:
+      - collect: order_id
+      - action: action_check_order_context

@@ -1,0 +1,16 @@
+[
+  {"name":"missing_multiturn","turns":[{"message":"Er ontbreekt een artikel in mijn bestelling","category":"missing"},{"message":"kv-10482"}],"order":"KV-10482","handoff":true,"contains":"ontbreekt"},
+  {"name":"damage","turns":[{"message":"Mijn product is kapot aangekomen KV-20991"}],"order":"KV-20991","handoff":true,"contains":"foto"},
+  {"name":"partner","turns":[{"message":"Hoe werkt een partner retour?","category":"partner"},{"message":"KV-77830"}],"order":"KV-77830","handoff":true,"contains":"partnerbestelling"},
+  {"name":"delayed_order","turns":[{"message":"Waar is mijn bestelling KV-30014?"}],"order":"KV-30014","handoff":false,"contains":"vertraagd"},
+  {"name":"split_delivery","turns":[{"message":"Er mist een product uit KV-40025","category":"missing"}],"order":"KV-40025","handoff":false,"contains":"tweede levering"},
+  {"name":"completed_refund","turns":[{"message":"Is mijn geld terug voor KV-50036?","category":"refund"}],"order":"KV-50036","handoff":false,"contains":"afgerond"},
+  {"name":"return_exception","turns":[{"message":"Kan ik KV-60047 retourneren?","category":"return"}],"order":"KV-60047","handoff":true,"contains":"niet direct retourneerbaar"},
+  {"name":"refund_pending","turns":[{"message":"Mijn terugbetaling van KV-70058"}],"order":"KV-70058","handoff":false,"contains":"in behandeling"},
+  {"name":"unknown_order","turns":[{"message":"Bestelling KV-99999"}],"order":null,"handoff":false,"contains":"niet vinden"},
+  {"name":"out_of_scope","turns":[{"message":"Wat is het weer morgen?"}],"order":null,"handoff":false,"contains":"kan helpen"},
+  {"name":"human_request","turns":[{"message":"Ik wil een medewerker spreken"}],"order":null,"handoff":true,"contains":"Demonstratiecase"},
+  {"name":"typo_missing","turns":[{"message":"Ik mis een artkel"},{"message":"KV-10482"}],"order":"KV-10482","handoff":true,"contains":"ontbreekt"},
+  {"name":"invalid_identifier","turns":[{"message":"Mijn bestelling is KV-1234"}],"order":null,"handoff":false,"contains":"ordernummer"},
+  {"name":"interrupted_flow","turns":[{"message":"Mijn artikel ontbreekt"},{"message":"Wat is het weer?"}],"order":null,"handoff":false,"contains":"ordernummer"}
+]
