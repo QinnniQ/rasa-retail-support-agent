@@ -1,291 +1,115 @@
-﻿# Retail Support AgentOps — Rasa Customer-Service Automation
+# Rasa Retail Support Agent
 
-A Rasa-based customer-service automation prototype for Dutch retail webshop support.
+**An independent retail support platform demonstration by [Nicholai Gay](https://profile.nickcloud.dev/).** It shows how a Dutch customer enquiry can become an order lookup, a rule-based answer, and a structured human handoff. Kruidvat is the sole visual showcase brand. The app is **not affiliated with Kruidvat or Rasa** and contains only fictional orders.
 
-This project demonstrates how a retail chatbot can move beyond static FAQ responses toward structured, order-aware, and inspectable support automation. The prototype focuses on high-volume customer-service scenarios such as missing items, damaged products, returns, delivery issues, partner orders, refund status, and smarter handoff to human support.
+The original 2026 prototype contained a Rasa conversation layer, a Python action server, a three-order FastAPI mock, and a Streamlit UI. The React interface, SQLite case workflow, public demo adapter, and engineering explorer are later independent portfolio work. See the [baseline audit](docs/BASELINE_AUDIT.md).
 
-> This is an independent portfolio project inspired by common Dutch retail webshop support flows. It is not an official Kruidvat, HEMA, or AS Watson product.
+![Rendered desktop customer-service homepage](screenshots/home-desktop.png)
 
----
+[Mobile homepage screenshot](screenshots/home-mobile.png) · Screenshots captured from automated Chromium browser journeys.
 
-## Why this project matters
+## Try it locally
 
-Many retail chatbots can answer general customer-service questions, but more complex webshop cases often require order-specific context.
+### Public demo mode — no Rasa license
 
-This prototype explores the next layer of support automation:
+Prerequisites: Python 3.11 or newer, Node 22+, npm. In PowerShell:
 
-* collecting the right information from the customer,
-* retrieving structured order context from a backend service,
-* identifying whether the issue involves a missing item, damaged product, partner order, refund, or delivery problem,
-* providing clearer customer guidance,
-* and preparing a more useful handoff when a human medewerker is needed.
-
-The goal is not to replace human support. The goal is to reduce avoidable support load and make escalations more informed.
-
----
-
-## Core use case
-
-A customer reports a missing item:
-
-```text
-Er ontbreekt een artikel in mijn bestelling. Wat nu?
+```powershell
+python -m pip install -r requirements-dev.txt
+$env:SUPPORT_MODE = 'demo'
+$env:SUPPORT_OPS_TOKEN = 'choose-a-long-local-secret'
+python -m uvicorn mock_backend:app --host 127.0.0.1 --port 8001
 ```
 
-The assistant gives initial guidance and then supports an order-aware lookup:
+In another PowerShell terminal:
 
-```text
-Ik wil mijn bestelling controleren
-Mijn ordernummer is KV-10482
+```powershell
+cd frontend
+npm ci
+npm run dev
 ```
 
-The system retrieves example order data from a FastAPI backend and returns context such as:
+Open `http://localhost:5173`. Select **Ontbrekend artikel**, then enter `KV-10482`. The order card appears and a simulated case is stored in SQLite. Open **Support Operations** and enter the same `SUPPORT_OPS_TOKEN` to inspect or update the case. The Vite server proxies `/api` to local FastAPI. The database is `data/support.db` by default.
 
-* order status,
-* delivery status,
-* missing item details,
-* refund status,
-* item overview,
-* partner-order flag,
-* recommended next step,
-* and handoff reason.
+Alternatively, copy `.env.example` to `.env`, set a fresh `SUPPORT_OPS_TOKEN`, and run `docker compose up --build`. Open `http://localhost:8080`. Compose publishes its API only on `127.0.0.1:8001` and persists cases in a named volume. No cloud service is required.
 
----
+### Genuine Rasa mode — licensed runtime required
 
-## Key features
+The checkout does **not** include Rasa Pro or a license. The pinned `rasa-sdk==3.16.1` dependency resolves for Python 3.11 but does not support this host's Python 3.14, so use Python 3.11 for the action server. With a valid compatible Rasa Pro installation, train the existing `config.yml`, `domain.yml`, and `data/` files using that installation's documented CLI. Start the Rasa server with the REST channel in `credentials.yml` and `endpoints.yml`, plus the action server. For example, with the services running locally:
 
-* **Rasa conversational agent** with structured Dutch support flows
-* **Flow-based order lookup** using slot collection for `order_id`
-* **Custom Rasa actions** for backend API calls
-* **FastAPI mock backend** simulating order context
-* **Streamlit demo UI** for a customer-facing retail support experience
-* **Rasa Inspector compatibility** for traceable agent behavior
-* **Dutch retail CX scenarios** including missing items, damaged products, returns, delivery issues, partner-order nuance, and human handoff
+```powershell
+$env:RETAIL_API_URL = 'http://localhost:8001'
+$env:SUPPORT_OPS_TOKEN = 'same-secret-as-api'
+python -m rasa_sdk --actions actions
+```
 
----
+In a separate licensed Rasa environment:
+
+```powershell
+rasa train
+rasa run --enable-api --credentials credentials.yml --endpoints endpoints.yml --host 127.0.0.1 --port 5005
+```
+
+Set `$env:SUPPORT_MODE = 'rasa'` and `$env:RASA_URL = 'http://localhost:5005'` **before starting the FastAPI process**. The gateway then forwards browser messages to the actual Rasa REST webhook. NLU-triggered flows collect `order_id` for status, missing items, damage, returns, refunds, partner orders, and delivery, then invoke SDK actions using the shared policy code; the explicit human-handoff rule calls the case action. Rasa training and live behavior require verification in the specific licensed version used. The public demo's deterministic router must not be described as Rasa or a trained language model.
+
+For a containerized SDK action server, `docker compose --profile rasa up --build actions`; it connects to the API using `http://api:8001`. A licensed Rasa process on the Windows host can use `endpoints.yml` to reach port 5055. If that process runs inside the Compose network, use `endpoints.docker.yml`. Do not expose Rasa administrative endpoints publicly.
+
+## What to explore
+
+| Example | Scenario | Expected demo behavior |
+| --- | --- | --- |
+| `KV-10482` | Missing article | Order card and investigation case |
+| `KV-20991` | Damaged article | Evidence guidance and review case |
+| `KV-77830` | Partner purchase | Partner route and review case |
+| `KV-30014` | Delayed order | Status, no automatic case |
+| `KV-40025` | Split delivery | Wait for second parcel |
+| `KV-50036` | Completed refund | Recorded simulated status |
+| `KV-60047` | Return exception | Human review case |
+| `KV-70058` | Pending refund | Uncertain status, no promised date |
+
+The customer interface has six guided topics, multi-turn order entry, order cards, quick replies, reset, error messages, and mobile layouts. Support Operations lists cases, filters and searches them, and persists assignment and status changes. The Architecture & System Explorer shows the actual mode, service health, and a trace of observable steps. Its demo trace is explicitly simulated.
 
 ## Architecture
 
 ```text
-Customer
-   ↓
-Streamlit Chat UI
-   ↓
-Rasa REST Channel
-   ↓
-Rasa Flow / NLU / Rules
-   ↓
-Custom Action: action_check_order_context
-   ↓
-FastAPI Mock Backend
-   ↓
-Order-aware response
+Browser (React + TypeScript)
+  → FastAPI gateway (/api/chat)
+    → demo: deterministic issue routing + shared policy
+    → licensed mode: Rasa REST → Rasa SDK actions → retail API
+  → fictional order records + SQLite sessions/cases
 ```
 
----
+See [architecture and security boundaries](docs/ARCHITECTURE.md), [policy sources](docs/POLICY_AND_SOURCES.md), and [engineering decisions](docs/interview-prep/ENGINEERING_DECISIONS.md). Return eligibility flags are **example rules**, not authoritative Kruidvat or legal advice. No real refund, return, account lookup, representative assignment, or CRM transfer takes place.
+The visual direction is documented in the [design reference](docs/DESIGN_REFERENCE.md).
 
-## Tech stack
-
-* Python
-* Rasa Pro
-* Rasa SDK
-* FastAPI
-* Streamlit
-* Requests
-* Uvicorn
-* YAML-based Rasa domain, rules, stories, NLU, and flows
-
----
-
-## Example demo orders
-
-The mock backend includes three example orders:
-
-| Order ID   | Scenario      | Purpose                                                 |
-| ---------- | ------------- | ------------------------------------------------------- |
-| `KV-10482` | Missing item  | Demonstrates incomplete delivery and handoff reasoning  |
-| `KV-20991` | Damaged item  | Demonstrates damage guidance and review escalation      |
-| `KV-77830` | Partner order | Demonstrates partner-order nuance and return complexity |
-
----
-
-## Demo flow
-
-Recommended primary demo:
-
-```text
-Er ontbreekt een artikel in mijn bestelling. Wat nu?
-```
-
-```text
-Ik wil mijn bestelling controleren
-```
-
-```text
-Mijn ordernummer is KV-10482
-```
-
-Optional damaged-item demo:
-
-```text
-Mijn artikel is beschadigd aangekomen. Wat moet ik doen?
-```
-
-```text
-Ik wil mijn bestelling controleren
-```
-
-```text
-Mijn ordernummer is KV-20991
-```
-
-Optional partner-order demo:
-
-```text
-Hoe retourneer ik een partnerartikel?
-```
-
-```text
-Ik wil mijn bestelling controleren
-```
-
-```text
-Mijn ordernummer is KV-77830
-```
-
----
-
-## Project structure
-
-```text
-rasa-retail-support-agent/
-│
-├── app.py                  # Streamlit customer-facing demo UI
-├── mock_backend.py          # FastAPI mock order backend
-├── config.yml               # Rasa pipeline and policies
-├── domain.yml               # Intents, slots, responses, actions
-├── endpoints.yml            # Rasa action server endpoint
-├── credentials.yml          # Rasa channel configuration
-│
-├── actions/
-│   └── actions.py           # Custom Rasa backend lookup action
-│
-├── data/
-│   ├── nlu.yml              # Dutch NLU examples and order regex
-│   ├── rules.yml            # Rule-based support responses
-│   ├── stories.yml          # Example conversation paths
-│   └── flows.yml            # Order context lookup flow
-│
-├── screenshots/             # Optional: demo and Inspector screenshots
-│   
-│   
-│
-└── README.md
-```
-
----
-
-## Running locally
-
-### 1. Create and activate a virtual environment
+## Verify
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+python -m pytest -q
+python -m evaluation.run
+cd frontend
+npm run format:check
+npm run build
+npm run test:proxy
+npm run test:e2e
+npm audit --omit=dev --audit-level=high
 ```
 
-### 2. Install dependencies
+On 22 October 2026: fourteen API/policy/action/configuration tests passed, fourteen authored demo scenarios passed, four desktop/mobile Chromium tests passed, two Pages proxy tests passed, the TypeScript/Vite build passed, and npm audit found zero known high-severity production dependency vulnerabilities. The scenario suite is small and curated; it does not establish general intent accuracy or business impact. Rasa Pro training, a live Rasa action server, and Docker builds remain unverified in this environment. CI repeats the Python and frontend checks on each push and pull request.
 
-```powershell
-pip install rasa-pro rasa-sdk fastapi uvicorn requests streamlit
-```
+## Deployment boundary
 
-> Depending on your Rasa license/setup, you may need to install the appropriate Rasa package available to you.
+The frontend's static build can be hosted on Cloudflare Pages **only if** a separately hosted HTTPS FastAPI service is provided. A Pages Function forwards allowlisted `/api` requests to an `API_ORIGIN` environment variable. Cloudflare Pages does not run this Python/SQLite application. The current Compose setup is for local demonstration. Before public hosting, replace the local token gate with real authentication, protect case data, add rate limits, persistent hosted storage, monitoring, HTTPS, and a private Rasa network. See the [deployment preparation](docs/DEPLOYMENT.md). No DNS or cloud deployment has been changed. `support.nickcloud.dev` is a possible future destination, not a live URL.
 
-### 3. Train the Rasa assistant
+## Interview materials
 
-```powershell
-rasa train
-```
+- [Project story](docs/interview-prep/PROJECT_STORY.md)
+- [Architecture explained](docs/interview-prep/ARCHITECTURE_EXPLAINED.md)
+- [Engineering decisions](docs/interview-prep/ENGINEERING_DECISIONS.md)
+- [Technical questions and answers](docs/interview-prep/TECHNICAL_INTERVIEW_QA.md)
+- [Five-minute demo script](docs/interview-prep/LIVE_DEMO_SCRIPT.md)
+- [Observed failure stories](docs/interview-prep/FAILURE_STORIES.md)
+- [CV and portfolio copy](docs/interview-prep/CV_AND_PORTFOLIO_COPY.md)
+- [Evaluation methodology and limits](docs/EVALUATION.md)
 
-### 4. Start the mock backend
-
-```powershell
-python -m uvicorn mock_backend:app --reload --port 8001
-```
-
-### 5. Start the Rasa action server
-
-Open a second terminal:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-rasa run actions
-```
-
-### 6. Start the Rasa server
-
-Open a third terminal:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-rasa run --enable-api --cors "*" --port 5005
-```
-
-### 7. Start the Streamlit UI
-
-Open a fourth terminal:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-streamlit run app.py
-```
-
-Then open:
-
-```text
-http://localhost:8501
-```
-
----
-
-## Rasa Inspector
-
-To inspect the assistant behavior under the hood:
-
-```powershell
-rasa inspect --nextgen
-```
-
-The Inspector view can show:
-
-* active flow,
-* slot collection,
-* order ID handling,
-* custom action execution,
-* and flow completion.
-
-This is useful for demonstrating that the assistant is not a black-box chatbot, but a structured and traceable support workflow.
-
----
-
-## Portfolio value
-
-This project demonstrates practical skills in:
-
-* conversational AI design,
-* Rasa flow development,
-* custom action engineering,
-* backend API integration,
-* customer-service automation,
-* Streamlit interface design,
-* support workflow modeling,
-* and business-facing AI prototyping.
-
----
-
-## Disclaimer
-
-This project uses simulated order data and mock backend services. It does not connect to real customer accounts, retailer systems, or private order data.
-
-Brand references are used only to demonstrate realistic retail support scenarios in an independent portfolio prototype.
+The original Streamlit implementation remains in `app.py` as historical reference. It is not the default interface and still requires a Rasa server. Contributions from the original collaboration and independent later work should be described separately; details of individual roles require confirmation by the people involved.
